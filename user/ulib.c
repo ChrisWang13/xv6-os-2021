@@ -134,3 +134,17 @@ memcpy(void *dst, const void *src, uint n)
 {
   return memmove(dst, src, n);
 }
+
+// check if argv[1] is all number character
+// return 1 if true; 0 if false
+int 
+isNumber(const char* s)
+{
+  int len = strlen(s);
+  for(int i = 0; i < len; ++i) {
+    if(s[i] < '0' || s[i] > '9') {
+      return 0;
+    }
+  }
+  return 1;
+}
