@@ -6,11 +6,11 @@
 char*
 fmtname(char *path)
 {
-  static char buf[DIRSIZ+1];
+  static char buf[DIRSIZ + 1];
   char *p;
 
   // Find first character after last slash.
-  for(p=path+strlen(path); p >= path && *p != '/'; p--)
+  for(p = path + strlen(path); p >= path && *p != '/'; p--)
     ;
   p++;
 
@@ -18,7 +18,7 @@ fmtname(char *path)
   if(strlen(p) >= DIRSIZ)
     return p;
   memmove(buf, p, strlen(p));
-  memset(buf+strlen(p), ' ', DIRSIZ-strlen(p));
+  memset(buf + strlen(p), ' ', DIRSIZ - strlen(p));
   return buf;
 }
 
@@ -73,13 +73,11 @@ ls(char *path)
 int
 main(int argc, char *argv[])
 {
-  int i;
-
   if(argc < 2){
     ls(".");
     exit(0);
   }
-  for(i=1; i<argc; i++)
+  for(int i = 1; i < argc; ++i)
     ls(argv[i]);
   exit(0);
 }
