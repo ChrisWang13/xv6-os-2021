@@ -5,8 +5,8 @@
 int 
 main(int argc, char* argv[])
 {
-  if(isNumber(argv[1]) == 0) {
-    fprintf(2, "Invalid input\n");
+  if(isNumber(argv[1]) == 0 || argc != 2) {
+    fprintf(2, "invalid input\n");
     exit(1);
   }
   int time = atoi(argv[1]);
