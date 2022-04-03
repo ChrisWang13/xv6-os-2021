@@ -21,12 +21,11 @@ main(int argc, char* argv[])
 {
   char buf;
   char* back_argv[MAXARG];
-	char read_input_line[10][100];
+	char read_input_line[20];
   char* cmd = argv[1];
 
   int index_back_argv = 0;
-  int index_col = 0;
-	int index_row = 0;
+	int index_col = 0;
 
   while(read(0, &buf, 1) == 1) { 
     // buf = '\n' <==> left input is finished.
@@ -38,8 +37,9 @@ main(int argc, char* argv[])
       	back_argv[index_back_argv++] = argv[i];
       }
 			// 2. Append the backlines.
-      back_argv[index_back_argv++] = read_input_line[index_col];
-			back_argv[index_back_argv] = 0;
+			back_argv[index_back_argv] = malloc(strlen(read_input_line) + 1);
+      strcpy(back_argv[index_back_argv], read_input_line);
+			back_argv[++index_back_argv] = 0;
 			// exec implementation
 			// for(argc = 0; argv[argc]; ++argc)
 			if(fork() == 0) {
@@ -48,10 +48,11 @@ main(int argc, char* argv[])
 			}
 			wait(0);	
 			// init for next '\n' line
-			index_row = 0; ++index_col;	
+			index_col = 0;  
 			index_back_argv = 0;	
+			memset(read_input_line, 0, sizeof read_input_line);
 		}
-    else read_input_line[index_col][index_row++] = buf;
+    else read_input_line[index_col++] = buf;
   }
   exit(0);
 }
