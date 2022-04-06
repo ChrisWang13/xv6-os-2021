@@ -1,3 +1,25 @@
+/* 1. volatile :
+   keep instructions from moving, deleting
+   by compiler's optimization(especially within loop). 
+   
+   2. r_func for reading, w_func for writing.
+
+   3. extender asm in c, provided by gcc inline assembly extension
+    asm ( assembler template 
+           : output operands                  optional 
+           : input operands                   optional 
+           : list of clobbered registers      optional
+           );
+    KEY POINTS:
+    Each operand is referenced by numbers
+    the first output operand is numbered 0, continuing 
+    in increasing order, and the last input 
+    operand is numbered n-1(n operand in total).
+
+    Reference:
+    https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html#ss5.1
+*/
+
 // which hart (core) is this?
 static inline uint64
 r_mhartid()
