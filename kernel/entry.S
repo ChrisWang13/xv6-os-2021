@@ -11,6 +11,11 @@ _entry:
         # sp = stack0 + (hartid * 4096)
         la sp, stack0
         li a0, 1024*4
+        # hart stands for hardware thread,
+        # at least one hart must 
+        # have a hart ID of 0.
+        # csrr for reading a CSR
+        # csrw for writing a CSR
 	csrr a1, mhartid
         addi a1, a1, 1
         mul a0, a0, a1
