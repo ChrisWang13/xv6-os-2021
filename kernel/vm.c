@@ -365,7 +365,7 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
   return 0;
 }
 
-// Copy from user to kernel.
+// Copy from user to kernel. One byte at a time(char)
 // Copy len bytes to dst from virtual address srcva in a given page table.
 // Return 0 on success, -1 on error.
 int
@@ -410,6 +410,7 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
       n = max;
 
     char *p = (char *) (pa0 + (srcva - va0));
+    // Need to handle the last '/0' and set get_null sign
     while(n > 0){
       if(*p == '\0'){
         *dst = '\0';
