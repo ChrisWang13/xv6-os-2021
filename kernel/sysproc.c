@@ -95,3 +95,15 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// a0 as first syscall argument is saved in trace_mask
+uint64 
+sys_trace(void)
+{ 
+  int trace_mask;
+  // retrive a0 to trace_mask
+  if(argint(0, &trace_mask) < 0)
+    return -1;
+  myproc()->trace_mask = trace_mask;
+  return 0;
+}
