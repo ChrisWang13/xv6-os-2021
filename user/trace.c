@@ -3,6 +3,9 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
+// trace 32 grep hello README
+// trace 2147483647 grep hello README
+
 int
 main(int argc, char *argv[])
 {
