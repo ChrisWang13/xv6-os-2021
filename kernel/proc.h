@@ -105,4 +105,9 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  // add variable trace mask 
+  // to save the first  
+  // syscall call argument (32 or 2147483647) in 
+  // tramframe->a0 to trace_mask
+  int trace_mask;
 };
