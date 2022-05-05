@@ -3,6 +3,8 @@
     "cmath": "c",
     "*.tcc": "c",
     "spinlock.h": "c",
-    "memlayout.h": "c"
+    "memlayout.h": "c",
+    "elf.h": "c",
+    "defs.h": "c"
   }
 }
