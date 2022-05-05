@@ -440,8 +440,9 @@ walk_print(pagetable_t pagetable, int level)
   if(level == 3) return;
   for(int index = 0; index < 512; index++) {
     pte_t pte = pagetable[index];
-    // Valid page in this pagetable
-    if(pte & PTE_V) {
+    // Valid and not leaf page
+    // Pointer to next level of page table
+    if((pte & PTE_V) && (pte & PTE_R & PTE_W & PTE_X) == 0) {
       // Print (level - 1)th .. format
       for(int j = 0; j < level; j++) {
         printf(".. ");
