@@ -81,6 +81,35 @@ int
 sys_pgaccess(void)
 {
   // lab pgtbl: your code here.
+  uint64 fpva;    // First user page virtual address
+  int pnum;       // Number of pages to check
+  uint64 abits;   // If page n is accessed, set nth bit to 1
+  uint64 tmp = 0; // Init tmp = 0
+  // Read three arguments
+  if(argaddr(0, &fpva) < 0) {
+    return -1; 
+  }
+  if(argint(1, &pnum) < 0) {
+    return -1;
+  } 
+  if(argaddr(2, &abits) < 0) {
+    return -1;
+  }
+  pagetable_t pgtbl = myproc()->pagetable;
+  pte_t* pte_addr;
+  for(int i = 0; i < pnum; i++) {
+    pte_addr = walk(pgtbl, fpva, 0);
+    if(*pte_addr & PTE_A) {
+      // Clear PTE_A bit
+      *pte_addr &= (~PTE_A);
+      tmp |= (1 << i); 
+    }
+    fpva += PGSIZE;
+  }
+
+  if(copyout(pgtbl, abits, (char*)&tmp, sizeof(uint64)) < 0) {
+    return -1;
+  }
   return 0;
 }
 #endif
