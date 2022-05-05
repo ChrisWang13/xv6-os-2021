@@ -1,6 +1,8 @@
 {
   "files.associations": {
     "cmath": "c",
-    "*.tcc": "c"
+    "*.tcc": "c",
+    "spinlock.h": "c",
+    "memlayout.h": "c"
   }
 }
