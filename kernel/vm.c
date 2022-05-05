@@ -432,3 +432,34 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     return -1;
   }
 }
+
+void 
+walk_print(pagetable_t pagetable, int level)
+{
+  // level = 3, finished printing out L2 PTE, return
+  if(level == 3) return;
+  for(int index = 0; index < 512; index++) {
+    pte_t pte = pagetable[index];
+    // Valid page in this pagetable
+    if(pte & PTE_V) {
+      // Print (level - 1)th .. format
+      for(int j = 0; j < level; j++) {
+        printf(".. ");
+      }
+      // This PTE points to lower level pagetable
+      uint64 child = PTE2PA(pte);
+      // Show PTE index, PTE bits, and pa extracted from PTE
+      printf("..%d: pte %p pa %p\n", index, pte, child);
+      // Dfs into child page, level max = 2
+      walk_print((pagetable_t)child, level + 1);
+    }
+  }
+}
+
+void 
+vmprint(pagetable_t pagetable)
+{
+  // Display arguments to vmprint
+  printf("page table %p\n",pagetable);
+  walk_print(pagetable, 0);
+} 
