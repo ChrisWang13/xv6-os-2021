@@ -80,6 +80,11 @@ int             pipewrite(struct pipe*, uint64, int);
 void            printf(char*, ...);
 void            panic(char*) __attribute__((noreturn));
 void            printfinit(void);
+// backtrace in kernel/printf.c, trace kernel
+// when it panics. Use fp - 8 (return address) and 
+// fp - 16 (saved previous fp) to trace page
+// allocated for stack.
+void            backtrace (void);
 
 // proc.c
 int             cpuid(void);
@@ -184,3 +189,4 @@ void            virtio_disk_intr(void);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
+
