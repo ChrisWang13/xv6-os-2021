@@ -1,5 +1,6 @@
 //
 // formatted console output -- printf, panic.
+// add backtrace when kernel panics.
 //
 
 #include <stdarg.h>
@@ -118,6 +119,8 @@ void
 panic(char *s)
 {
   pr.locking = 0;
+  // backtrace before panic
+  backtrace();
   printf("panic: ");
   printf(s);
   printf("\n");
@@ -131,4 +134,21 @@ printfinit(void)
 {
   initlock(&pr.lock, "pr");
   pr.locking = 1;
+}
+
+// Output: 0x???? 
+// Usage: addr2line -e 0x???
+// similar to gdb-multiarch:
+// b panic -> c -> bt 
+void backtrace(void) 
+{
+  printf("Backtrace:\n");
+  uint64 fp = r_fp();
+  while (fp != PGROUNDUP(fp)) {
+    // (fp - 8) == return address (backtrace calling function).
+    uint64 ra = *(uint64*)(fp - 8);
+    printf("%p\n", ra);
+    // interate fp to fp - 16, which saves previous fp.
+    fp = *(uint64*)(fp - 16);
+  }
 }
