@@ -96,3 +96,27 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// TODO: 
+uint64 sys_sigalarm(void) 
+{ 
+  // Extract argument 0 and 1.
+  // argument 0: int ticks interval
+  // argument 1: pointer of handling function
+  int n; // argint(int, int*)
+  uint64 handler; // argaddr(int, uint64*)
+  if(argint(0, &n) < 0 || argaddr(1, &handler) < 0) 
+    return -1;
+  myproc()->alarm_itv = n;
+  myproc()->handler = handler;
+  myproc()->ticks_left = n;
+  
+  return 0;
+}
+
+// TODO: 
+uint64 sys_sigreturn(void) 
+{ 
+  return 0;
+}
+
