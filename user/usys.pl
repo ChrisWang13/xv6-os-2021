@@ -36,3 +36,6 @@ entry("getpid");
 entry("sbrk");
 entry("sleep");
 entry("uptime");
+# Task3: Alarm interrupt handler.
+entry("sigalarm");
+entry("sigreturn");
