@@ -127,6 +127,17 @@ found:
     return 0;
   }
 
+  // Allocate a trapframe page to save before calling alarm.
+  if((p->saved = (struct trapframe *)kalloc()) == 0){
+    freeproc(p);
+    release(&p->lock);
+    return 0;
+  }
+
+  // Init proc.h attribute relevant with alarm.
+  p->alarm_itv = 0;
+  p->ticks_left = 0;
+
   // An empty user page table.
   p->pagetable = proc_pagetable(p);
   if(p->pagetable == 0){
@@ -153,6 +164,12 @@ freeproc(struct proc *p)
   if(p->trapframe)
     kfree((void*)p->trapframe);
   p->trapframe = 0;
+
+  // Free saved alarm trapframe.
+  if(p->saved)
+    kfree((void*)p->saved);
+  p->saved = 0;
+
   if(p->pagetable)
     proc_freepagetable(p->pagetable, p->sz);
   p->pagetable = 0;
@@ -164,6 +181,7 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+
 }
 
 // Create a user page table for a given process,
