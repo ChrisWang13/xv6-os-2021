@@ -97,7 +97,7 @@ sys_uptime(void)
   return xticks;
 }
 
-// TODO: 
+// Test 0 passed: invoke interrupt handler.
 uint64 sys_sigalarm(void) 
 { 
   // Extract argument 0 and 1.
@@ -114,9 +114,18 @@ uint64 sys_sigalarm(void)
   return 0;
 }
 
-// TODO: 
+// Test1/2 passed: resume interrupted code.
+// save and 
 uint64 sys_sigreturn(void) 
 { 
+  struct proc *p = myproc();
+  if(1) {
+    printf("--------\n");
+    printf("%p , %p\n",p->trapframe, p->saved);
+    printf("---------\n");
+  } 
+  memmove(p->trapframe, p->saved, sizeof(struct trapframe));   
+  p->intr_on = 0;
   return 0;
 }
 
