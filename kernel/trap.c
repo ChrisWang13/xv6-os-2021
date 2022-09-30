@@ -78,14 +78,19 @@ usertrap(void)
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2) {
-    if(p->alarm_itv != 0 && --(p->ticks_left) == 0) {
+    if(p->alarm_itv != 0 && --(p->ticks_left) == 0 && 
+       !p->intr_on)  
+    {
       p->ticks_left = p->alarm_itv;
       // call handler function when returning to user space.
+      memmove(p->saved, p->trapframe, sizeof(struct trapframe));    
+      // backup trapframe
       p->trapframe->epc = p->handler; 
+      p->intr_on = 1; // interrupt is on 
     }
     yield();
   }
-  
+
   usertrapret();
 }
 
