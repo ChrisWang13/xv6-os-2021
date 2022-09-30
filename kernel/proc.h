@@ -105,4 +105,10 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  // Task3: Alarm user interrupt handler
+  uint64 alarm_itv;            // alarm interval = sigalarm argument1: int ticks
+  uint64 handler;              // address= sigalarm argument2: function pointer address
+  uint64 ticks_left;           // ticks left till next alarm interrupt call
+  uint64 intr_on;              // 
+  struct trapframe* saved;     // copy of saved trapframe before alarm interrupt 
 };
