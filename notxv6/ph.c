@@ -16,6 +16,8 @@ struct entry {
 struct entry *table[NBUCKET];
 int keys[NKEYS];
 int nthread = 1;
+// Add lock for every buckets, better than one single big lock
+pthread_mutex_t locks[NBUCKET];
 
 
 double
@@ -40,7 +42,8 @@ static
 void put(int key, int value)
 {
   int i = key % NBUCKET;
-
+  // Lock 
+  pthread_mutex_lock(&locks[i]);
   // is the key already present?
   struct entry *e = 0;
   for (e = table[i]; e != 0; e = e->next) {
@@ -54,20 +57,21 @@ void put(int key, int value)
     // the new is new.
     insert(key, value, &table[i], table[i]);
   }
+  // Unlock
+  pthread_mutex_unlock(&locks[i]);
 
 }
 
 static struct entry*
 get(int key)
 {
+  // Read do not need to lock and unlock, since race condition 
+  // only regards with writing into memory
   int i = key % NBUCKET;
-
-
   struct entry *e = 0;
   for (e = table[i]; e != 0; e = e->next) {
     if (e->key == key) break;
   }
-
   return e;
 }
 
@@ -104,8 +108,7 @@ main(int argc, char *argv[])
   pthread_t *tha;
   void *value;
   double t1, t0;
-
-
+  
   if (argc < 2) {
     fprintf(stderr, "Usage: %s nthreads\n", argv[0]);
     exit(-1);
